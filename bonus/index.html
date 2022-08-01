@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campo Minato</title>
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/01de7d5bf8.js" crossorigin="anonymous"></script>
+    <!-- My CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <figure class="main-header__logo">
+            <img src="./img/Logo.png" alt="Boolean Logo">
+        </figure>
+        <h1 class="main-header__title">Campo Minato</h1>
+        <p class="main-header__result"></p>
+        <label for="difficulty">Difficoltà: </label>
+        <select class="main-header__difficulty" name="difficulty" id="difficulty">
+            <option value="1" selected>Facile</option>
+            <option value="2">Medio</option>
+            <option value="3">Difficile</option>
+        </select>
+        <button class="main-header__btn">Play</button>
+    </header>
+    <main class="main-content">
+        <div class="tabellone"></div>
+    </main>
+    <footer class="main-footer">
+        <p class="main-footer__text">Made with <i class="fas fa-heart"></i> by <a href="#">Boolean</a></p>
+    </footer>
+    <script type="text/javascript" src="./js/scripts.js"></script>
+</body>
+
+</html>

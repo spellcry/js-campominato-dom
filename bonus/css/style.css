@@ -1,0 +1,133 @@
+/* #region Root */
+:root {
+    --main-color: #7FFFD4;
+}
+
+/* #endregion Root */
+
+/* #region Regole Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* #endregion Regole Reset */
+
+/* #region Regole Layout */
+body {
+    height: 100vh;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    background-color: var(--main-color);
+}
+
+/* #endregion Regole Layout */
+
+/* #region Utility */
+.clicked {
+    background-color: darkorange;
+}
+
+/* #endregion Utility */
+
+/* #region Main Header */
+.main-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+}
+
+.main-header__logo {
+    margin-right: 1rem;
+}
+
+.main-header__title,
+.main-header__result {
+    margin-right: auto;
+}
+
+.main-header__result {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.main-header__result.win {
+    color: darkgreen;
+}
+
+.main-header__result.lost {
+    color: darkred;
+}
+
+.main-header label,
+.main-header__difficulty,
+.main-header__btn {
+    align-self: center;
+}
+
+.main-header__difficulty {
+    width: 120px;
+    padding-block: 0.25rem;
+    margin-inline: 5px;
+}
+
+.main-header__btn {
+    padding: 0.25rem 1rem;
+}
+
+/* #endregion Main Header */
+
+/* #region Tabellone */
+.tabellone {
+    flex-basis: 100%;
+    max-width: 768px;
+    margin-inline: auto;
+    display: grid;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* #endregion Tabellone */
+
+/* #region Square */
+.square {
+    height: 100%;
+    aspect-ratio: 1;
+    border: 2px solid currentColor;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+    font-size: 2rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.square.good {
+    background-color: darkblue;
+}
+
+.square.bad {
+    background-color: darkred;
+}
+
+/* #endregion Square */
+
+/* #region Main Footer */
+.main-footer {
+    padding: 1rem;
+    font-size: 0.8rem;
+}
+
+.main-footer i {
+    font-size: 0.6rem;
+}
+
+/* #endregion Main Footer */
