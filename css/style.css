@@ -96,6 +96,14 @@ body {
     user-select: none;
 }
 
+.square.good {
+    background-color: darkblue;
+}
+
+.square.bad {
+    background-color: darkred;
+}
+
 /* #endregion Square */
 
 /* #region Main Footer */
