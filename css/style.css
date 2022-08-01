@@ -49,8 +49,22 @@ body {
     margin-right: 1rem;
 }
 
-.main-header__title {
+.main-header__title,
+.main-header__result {
     margin-right: auto;
+}
+
+.main-header__result {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.main-header__result.win {
+    color: darkgreen;
+}
+
+.main-header__result.lost {
+    color: darkred;
 }
 
 .main-header label,
