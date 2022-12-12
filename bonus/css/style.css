@@ -100,7 +100,7 @@ body {
 .square {
     height: 100%;
     aspect-ratio: 1;
-    border: 2px solid currentColor;
+    border: 2px solid #333;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,6 +112,7 @@ body {
 
 .square.good {
     background-color: darkblue;
+    color: white;
 }
 
 .square.bad {
