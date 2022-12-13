@@ -3,6 +3,8 @@
 function getSquareElement(x, y) {
     const square = document.createElement('div');
     square.addEventListener('click', clickHandler);
+    square.addEventListener('mousedown', mouseDownHandler);
+    square.addEventListener('mouseup', mouseUpHandler);
     square.className = 'square';
     square.id = `${x + 1} ${y + 1}`;
     return square; 
@@ -66,7 +68,7 @@ function vintoPersoContinua(cella) {
         let xySplitted = xy.split(' ');
         const x = parseInt(xySplitted[0]);
         const y = parseInt(xySplitted[1]);
-        cella.innerHTML = matrixCampo[y - 1][x - 1];
+        showCells(x - 1, y - 1, cella);
         punteggio++;
         if ( punteggio === numCelleRiga ** 2 - arrayBombe.length ) {
             removeListener();
@@ -75,8 +77,64 @@ function vintoPersoContinua(cella) {
             alert('Partita terminata! Hai vinto!');
         } else {
             cella.removeEventListener('click', clickHandler);
-            cella.addEventListener('mousedown', mouseDownHandler);
-            cella.addEventListener('mouseup', mouseUpHandler);
+        }
+    }
+}
+
+// funzione che restituisce una cella partendo da
+// x e y
+function getCellFromXY(x, y) {
+    const cella = document.getElementById(`${x + 1} ${y + 1}`);
+    return cella;
+}
+
+// funzione che mostra la/le cella/e a seconda del numero
+// di bombe nelle vicinanze
+function showCells(x, y, cella) {
+    if(matrixCampo[y][x] !== 0) {
+        cella.innerHTML = matrixCampo[y][x];
+        return;
+    } else {
+        cella.innerHTML = matrixCampo[y][x];
+        if(x - 1 >= 0) {
+            // matrixCampo[y][x - 1] === 'B' ? countBombs++ : '';
+            const cella = getCellFromXY(x - 1, y);
+            showCells(x - 1, y, cella);
+            if(y + 1 <= 9) {
+                // matrixCampo[y + 1][x - 1] === 'B' ? countBombs++ : '';
+                const cella = getCellFromXY(x - 1, y + 1);
+                showCells(x - 1, y + 1, cella);
+            }
+            if(y - 1 >= 0) {
+                // matrixCampo[y - 1][x - 1] === 'B' ? countBombs++ : '';
+                const cella = getCellFromXY(x - 1, y - 1);
+                showCells(x - 1, y - 1, cella);
+            }
+        }
+        if(y - 1 >= 0) {
+            // matrixCampo[y - 1][x] === 'B' ? countBombs++ : '';
+            const cella = getCellFromXY(x, y - 1);
+            showCells(x, y - 1, cella);
+            if(x + 1 <= 9) {
+                // matrixCampo[y - 1][x + 1] === 'B' ? countBombs++ : '';
+                const cella = getCellFromXY(x + 1, y - 1);
+                showCells(x + 1, y - 1, cella);
+            }
+        }
+        if(x + 1 <= 9) {
+            // matrixCampo[y][x + 1] === 'B' ? countBombs++ : '';
+            const cella = getCellFromXY(x + 1, y);
+            showCells(x + 1, y, cella);
+            if(y + 1 <= 9) {
+                // matrixCampo[y + 1][x + 1] === 'B' ? countBombs++ : '';
+                const cella = getCellFromXY(x + 1, y + 1);
+                showCells(x + 1, y + 1, cella);
+            }   
+        }
+        if(y + 1 <= 9) {
+            // matrixCampo[y + 1][x] === 'B' ? countBombs++ : '';
+            const cella = getCellFromXY(x, y + 1);
+            showCells(x, y + 1, cella);
         }
     }
 }
@@ -99,16 +157,27 @@ function mouseUpHandler(event) {
     }
     if(event.which === 3) {
         rightMouseDown = false;
+        if(!leftMouseDown) {
+            const square = this;
+            if(square.classList.contains('flagged')) {
+                square.innerHTML = '';
+                square.classList.remove('flagged');
+                square.addEventListener('click', clickHandler);
+            } else {
+                square.innerHTML = '<i class="fa-solid fa-flag"></i>';
+                square.classList.add('flagged');
+                square.removeEventListener('click', clickHandler);
+            }
+        }
     }
 }
 
 // funzione che gestisce il click
-function clickHandler(event) {
+function clickHandler() {
     const square = this;
     square.classList.toggle('clicked'); 
     vintoPersoContinua(square); 
     square.style.cursor = 'auto';
-    
 }
 
 // funzione che elimina gli event listener
