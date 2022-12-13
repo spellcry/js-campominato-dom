@@ -64,7 +64,7 @@ function vintoPersoContinua(cella) {
         alert('Partita terminata! Hai perso.');
     } else {
         cella.classList.add('good')
-        xy = cella.dataset.numero;
+        let xy = cella.dataset.numero;
         let xySplitted = xy.split(' ');
         const x = parseInt(xySplitted[0]);
         const y = parseInt(xySplitted[1]);
@@ -91,52 +91,117 @@ function getCellFromXY(x, y) {
 // funzione che mostra la/le cella/e a seconda del numero
 // di bombe nelle vicinanze
 function showCells(x, y, cella) {
-    if(matrixCampo[y][x] !== 0) {
-        cella.innerHTML = matrixCampo[y][x];
-        return;
-    } else {
-        cella.innerHTML = matrixCampo[y][x];
-        if(x - 1 >= 0) {
-            // matrixCampo[y][x - 1] === 'B' ? countBombs++ : '';
-            const cella = getCellFromXY(x - 1, y);
-            showCells(x - 1, y, cella);
-            if(y + 1 <= 9) {
-                // matrixCampo[y + 1][x - 1] === 'B' ? countBombs++ : '';
-                const cella = getCellFromXY(x - 1, y + 1);
-                showCells(x - 1, y + 1, cella);
-            }
-            if(y - 1 >= 0) {
-                // matrixCampo[y - 1][x - 1] === 'B' ? countBombs++ : '';
-                const cella = getCellFromXY(x - 1, y - 1);
-                showCells(x - 1, y - 1, cella);
-            }
-        }
-        if(y - 1 >= 0) {
-            // matrixCampo[y - 1][x] === 'B' ? countBombs++ : '';
-            const cella = getCellFromXY(x, y - 1);
-            showCells(x, y - 1, cella);
-            if(x + 1 <= 9) {
-                // matrixCampo[y - 1][x + 1] === 'B' ? countBombs++ : '';
-                const cella = getCellFromXY(x + 1, y - 1);
-                showCells(x + 1, y - 1, cella);
-            }
-        }
-        if(x + 1 <= 9) {
-            // matrixCampo[y][x + 1] === 'B' ? countBombs++ : '';
-            const cella = getCellFromXY(x + 1, y);
-            showCells(x + 1, y, cella);
-            if(y + 1 <= 9) {
-                // matrixCampo[y + 1][x + 1] === 'B' ? countBombs++ : '';
-                const cella = getCellFromXY(x + 1, y + 1);
-                showCells(x + 1, y + 1, cella);
-            }   
-        }
-        if(y + 1 <= 9) {
-            // matrixCampo[y + 1][x] === 'B' ? countBombs++ : '';
-            const cella = getCellFromXY(x, y + 1);
-            showCells(x, y + 1, cella);
-        }
-    }
+    cella.innerHTML = matrixCampo[y][x];
+    cella.classList.add('clicked', 'good');
+    cella.removeEventListener('click', clickHandler);
+    // if(matrixCampo[y][x] === 0) {
+    //     cella.innerHTML = matrixCampo[y][x];
+    //     cella.classList.add('clicked', 'good');
+    //     cella.removeEventListener('click', clickHandler);
+    //     if(x - 1 >= 0) {            
+    //         const cella = getCellFromXY(x - 1, y);
+    //         if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //             if(matrixCampo[y][x - 1] !== 0 ) {
+    //                 cella.innerHTML = matrixCampo[y][x];
+    //                 cella.classList.add('clicked', 'good');
+    //                 cella.removeEventListener('click', clickHandler);
+    //             } else {
+    //                 showCells(x - 1, y, cella);
+    //             }
+    //         }
+    //         if(y + 1 <= 9) {                
+    //             const cella = getCellFromXY(x - 1, y + 1);
+    //             if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //                 if(matrixCampo[y + 1][x - 1] !== 0 ) {
+    //                     cella.innerHTML = matrixCampo[y][x];
+    //                     cella.classList.add('clicked', 'good');
+    //                     cella.removeEventListener('click', clickHandler);
+    //                 } else {
+    //                     showCells(x - 1, y + 1, cella);
+    //                 }
+    //             }
+    //         }
+    //         if(y - 1 >= 0) {                
+    //             const cella = getCellFromXY(x - 1, y - 1);
+    //             if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //                 if(matrixCampo[y - 1][x - 1] !== 0 ) {
+    //                     cella.innerHTML = matrixCampo[y][x];
+    //                     cella.classList.add('clicked', 'good');
+    //                     cella.removeEventListener('click', clickHandler);
+    //                 } else {
+    //                     showCells(x - 1, y - 1, cella);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     if(y - 1 >= 0) {            
+    //         const cella = getCellFromXY(x, y - 1);
+    //         if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //             if(matrixCampo[y - 1][x] !== 0 ) {
+    //                 cella.innerHTML = matrixCampo[y][x];
+    //                 cella.classList.add('clicked', 'good');
+    //                 cella.removeEventListener('click', clickHandler);
+    //             } else {
+    //                 showCells(x, y - 1, cella);
+    //             }
+    //         }
+    //         if(x + 1 <= 9) {                
+    //             const cella = getCellFromXY(x + 1, y - 1);
+    //             if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //                 if(matrixCampo[y - 1][x + 1] !== 0 ) {
+    //                     cella.innerHTML = matrixCampo[y][x];
+    //                     cella.classList.add('clicked', 'good');
+    //                     cella.removeEventListener('click', clickHandler);
+    //                 } else {
+    //                     showCells(x + 1, y - 1, cella);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     if(x + 1 <= 9) {            
+    //         const cella = getCellFromXY(x + 1, y);
+    //         if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //             if(matrixCampo[y][x + 1] !== 0 ) {
+    //                 cella.innerHTML = matrixCampo[y][x];
+    //                 cella.classList.add('clicked', 'good');
+    //                 cella.removeEventListener('click', clickHandler);
+    //             } else {
+    //                 showCells(x + 1, y, cella);
+    //             }
+    //         }
+    //         if(y + 1 <= 9) {                
+    //             const cella = getCellFromXY(x + 1, y + 1);
+    //             if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //                 if(matrixCampo[y + 1][x + 1] !== 0 ) {
+    //                     cella.innerHTML = matrixCampo[y][x];
+    //                     cella.classList.add('clicked', 'good');
+    //                     cella.removeEventListener('click', clickHandler);
+    //                 } else {
+    //                     showCells(x + 1, y + 1, cella);
+    //                 }
+    //             }
+    //         }   
+    //     }
+    //     if(y + 1 <= 9) {            
+    //         const cella = getCellFromXY(x, y + 1);
+    //         if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+    //             if(matrixCampo[y + 1][x] !== 0 ) {
+    //                 cella.innerHTML = matrixCampo[y][x];
+    //                 cella.classList.add('clicked', 'good');
+    //                 cella.removeEventListener('click', clickHandler);
+    //             } else {
+    //                 showCells(x, y + 1, cella);
+    //             }
+    //         }
+    //     }
+    // }
+    return;
+}
+
+function showCell(cella, x, y) {
+    cella.innerHTML = matrixCampo[y][x];
+    cella.classList.add('clicked', 'good');
+    cella.removeEventListener('click', clickHandler);
 }
 
 //funzione che gestisce il mouseDown
@@ -146,7 +211,82 @@ function mouseDownHandler(event) {
     }
     if(event.which === 3 && leftMouseDown) {
         rightMouseDown = true;
-        console.log(event.target)
+        const cella = this;
+        checkCellAround(cella);
+    }
+}
+
+// funzione che controlla le celle circostanti alla cella selezionata
+function checkCellAround(cella) {
+    let xy = cella.dataset.numero;
+    let xySplitted = xy.split(' ');
+    const x = parseInt(xySplitted[0]) - 1;
+    const y = parseInt(xySplitted[1]) - 1;
+    if(cella.classList.contains('clicked')) {
+        if(x - 1 >= 0) {            
+            const cella = getCellFromXY(x - 1, y);
+            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                if(!cella.classList.contains('clicked')) {
+                    cella.classList.toggle('check');
+                }
+            }
+            if(y + 1 <= 9) {                
+                const cella = getCellFromXY(x - 1, y + 1);
+                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                    if(!cella.classList.contains('clicked')) {
+                        cella.classList.toggle('check');
+                    }
+                }
+            }
+            if(y - 1 >= 0) {                
+                const cella = getCellFromXY(x - 1, y - 1);
+                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                    if(!cella.classList.contains('clicked')) {
+                        cella.classList.toggle('check');
+                    }
+                }
+            }
+        }
+        if(y - 1 >= 0) {            
+            const cella = getCellFromXY(x, y - 1);
+            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                if(!cella.classList.contains('clicked')) {
+                    cella.classList.toggle('check');
+                }
+            }
+            if(x + 1 <= 9) {                
+                const cella = getCellFromXY(x + 1, y - 1);
+                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                    if(!cella.classList.contains('clicked')) {
+                        cella.classList.toggle('check');
+                    }
+                }
+            }
+        }
+        if(x + 1 <= 9) {            
+            const cella = getCellFromXY(x + 1, y);
+            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                if(!cella.classList.contains('clicked')) {
+                    cella.classList.toggle('check');
+                }
+            }
+            if(y + 1 <= 9) {                
+                const cella = getCellFromXY(x + 1, y + 1);
+                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                    if(!cella.classList.contains('clicked')) {
+                        cella.classList.toggle('check');
+                    }
+                }
+            }   
+        }
+        if(y + 1 <= 9) {            
+            const cella = getCellFromXY(x, y + 1);
+            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
+                if(!cella.classList.contains('clicked')) {
+                    cella.classList.toggle('check');
+                }
+            }
+        }
     }
 }
 
@@ -154,20 +294,29 @@ function mouseDownHandler(event) {
 function mouseUpHandler(event) {
     if(event.which === 1) {
         leftMouseDown = false;
+        if(rightMouseDown) {
+            const cella = this;
+            checkCellAround(cella);
+        }
     }
     if(event.which === 3) {
         rightMouseDown = false;
         if(!leftMouseDown) {
             const square = this;
-            if(square.classList.contains('flagged')) {
-                square.innerHTML = '';
-                square.classList.remove('flagged');
-                square.addEventListener('click', clickHandler);
-            } else {
-                square.innerHTML = '<i class="fa-solid fa-flag"></i>';
-                square.classList.add('flagged');
-                square.removeEventListener('click', clickHandler);
+            if(!square.classList.contains('clicked')) {
+                if(square.classList.contains('flagged')) {
+                    square.innerHTML = '';
+                    square.classList.remove('flagged');
+                    square.addEventListener('click', clickHandler);
+                } else {
+                    square.innerHTML = '<i class="fa-solid fa-flag"></i>';
+                    square.classList.add('flagged');
+                    square.removeEventListener('click', clickHandler);
+                }
             }
+        } else {
+            const cella = this;
+            checkCellAround(cella);
         }
     }
 }

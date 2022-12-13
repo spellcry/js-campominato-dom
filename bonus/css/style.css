@@ -119,6 +119,10 @@ body {
     background-color: darkred;
 }
 
+.check {
+    background-color: #6bdab5;
+}
+
 /* #endregion Square */
 
 /* #region Main Footer */
