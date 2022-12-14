@@ -50,26 +50,33 @@ function rivelaBombe() {
 // funzione che decide se hai vinto, perso o continui a giocare
 function vintoPersoContinua(cella) {
     if (arrayBombe.includes(cella.dataset.numero) ) {
-        cella.classList.add('bad')
-        removeListener();
-        let resMsg = `Hai perso! Hai totalizzato ${punteggio} `;
-        if( punteggio === 1 ) {
-            resMsg += 'punto.';
+        if(cella.classList.contains('flagged')) {
+            if(bombFlagged === arrayBombe.length) {
+                removeListener();
+                resEl.innerHTML = `Hai vinto! Hai totalizzato ${punteggio} punti!`;
+                resEl.classList.add('win');
+                alert('Partita terminata! Hai vinto!');
+            }
         } else {
-            resMsg += 'punti.';
+            cella.classList.add('bad')
+            removeListener();
+            let resMsg = `Hai perso! Hai totalizzato ${punteggio} `;
+            if( punteggio === 1 ) {
+                resMsg += 'punto.';
+            } else {
+                resMsg += 'punti.';
+            }
+            resEl.append(resMsg);
+            resEl.classList.add('lost');
+            rivelaBombe();
+            alert('Partita terminata! Hai perso.');
         }
-        resEl.append(resMsg);
-        resEl.classList.add('lost');
-        rivelaBombe();
-        alert('Partita terminata! Hai perso.');
     } else {
-        cella.classList.add('good')
         let xy = cella.dataset.numero;
         let xySplitted = xy.split(' ');
         const x = parseInt(xySplitted[0]);
         const y = parseInt(xySplitted[1]);
         showCells(x - 1, y - 1, cella);
-        punteggio++;
         if ( punteggio === numCelleRiga ** 2 - arrayBombe.length ) {
             removeListener();
             resEl.innerHTML = `Hai vinto! Hai totalizzato ${punteggio} punti!`;
@@ -91,9 +98,11 @@ function getCellFromXY(x, y) {
 // funzione che mostra la/le cella/e a seconda del numero
 // di bombe nelle vicinanze
 function showCells(x, y, cella) {
-    cella.innerHTML = matrixCampo[y][x];
-    cella.classList.add('clicked', 'good');
-    cella.removeEventListener('click', clickHandler);
+    if(!cella.classList.contains('clicked')) {
+        showCell(cella, x, y);
+    } else {
+        
+    }
     // if(matrixCampo[y][x] === 0) {
     //     cella.innerHTML = matrixCampo[y][x];
     //     cella.classList.add('clicked', 'good');
@@ -195,13 +204,13 @@ function showCells(x, y, cella) {
     //         }
     //     }
     // }
-    return;
 }
 
 function showCell(cella, x, y) {
     cella.innerHTML = matrixCampo[y][x];
     cella.classList.add('clicked', 'good');
     cella.removeEventListener('click', clickHandler);
+    punteggio++;
 }
 
 //funzione che gestisce il mouseDown
@@ -222,72 +231,103 @@ function checkCellAround(cella) {
     let xySplitted = xy.split(' ');
     const x = parseInt(xySplitted[0]) - 1;
     const y = parseInt(xySplitted[1]) - 1;
+    const bombs = countFlaggedBombsNerby(x + 1, y + 1);
     if(cella.classList.contains('clicked')) {
         if(x - 1 >= 0) {            
-            const cella = getCellFromXY(x - 1, y);
-            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                if(!cella.classList.contains('clicked')) {
-                    cella.classList.toggle('check');
+            const newCell = getCellFromXY(x - 1, y);
+            if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                if(bombs !== parseInt(cella.innerHTML)) {
+                    newCell.classList.toggle('check');
+                } else {
+                    vintoPersoContinua(newCell);
                 }
             }
             if(y + 1 <= 9) {                
-                const cella = getCellFromXY(x - 1, y + 1);
-                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                    if(!cella.classList.contains('clicked')) {
-                        cella.classList.toggle('check');
+                const newCell = getCellFromXY(x - 1, y + 1);
+                if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                    if(bombs !== parseInt(cella.innerHTML)) {
+                        newCell.classList.toggle('check');
+                    } else {
+                        vintoPersoContinua(newCell);
                     }
                 }
             }
             if(y - 1 >= 0) {                
-                const cella = getCellFromXY(x - 1, y - 1);
-                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                    if(!cella.classList.contains('clicked')) {
-                        cella.classList.toggle('check');
+                const newCell = getCellFromXY(x - 1, y - 1);
+                if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                    if(bombs !== parseInt(cella.innerHTML)) {
+                        newCell.classList.toggle('check');
+                    } else {
+                        vintoPersoContinua(newCell);
                     }
                 }
             }
         }
         if(y - 1 >= 0) {            
-            const cella = getCellFromXY(x, y - 1);
-            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                if(!cella.classList.contains('clicked')) {
-                    cella.classList.toggle('check');
+            const newCell = getCellFromXY(x, y - 1);
+            if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                if(bombs !== parseInt(cella.innerHTML)) {
+                    newCell.classList.toggle('check');
+                } else {
+                    vintoPersoContinua(newCell);
                 }
             }
             if(x + 1 <= 9) {                
-                const cella = getCellFromXY(x + 1, y - 1);
-                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                    if(!cella.classList.contains('clicked')) {
-                        cella.classList.toggle('check');
+                const newCell = getCellFromXY(x + 1, y - 1);
+                if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                    if(bombs !== parseInt(cella.innerHTML)) {
+                        newCell.classList.toggle('check');
+                    } else {
+                        vintoPersoContinua(newCell);
                     }
                 }
             }
         }
         if(x + 1 <= 9) {            
-            const cella = getCellFromXY(x + 1, y);
-            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                if(!cella.classList.contains('clicked')) {
-                    cella.classList.toggle('check');
+            const newCell = getCellFromXY(x + 1, y);
+            if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                if(bombs !== parseInt(cella.innerHTML)) {
+                    newCell.classList.toggle('check');
+                } else {
+                    vintoPersoContinua(newCell);
                 }
             }
             if(y + 1 <= 9) {                
-                const cella = getCellFromXY(x + 1, y + 1);
-                if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                    if(!cella.classList.contains('clicked')) {
-                        cella.classList.toggle('check');
+                const newCell = getCellFromXY(x + 1, y + 1);
+                if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                    if(bombs !== parseInt(cella.innerHTML)) {
+                        newCell.classList.toggle('check');
+                    } else {
+                        vintoPersoContinua(newCell);
                     }
                 }
             }   
         }
         if(y + 1 <= 9) {            
-            const cella = getCellFromXY(x, y + 1);
-            if(!cella.classList.contains('clicked') || !cella.classList.contains('flagged')) {
-                if(!cella.classList.contains('clicked')) {
-                    cella.classList.toggle('check');
+            const newCell = getCellFromXY(x, y + 1);
+            if(!newCell.classList.contains('clicked') && !newCell.classList.contains('flagged')) {
+                if(bombs !== parseInt(cella.innerHTML)) {
+                    newCell.classList.toggle('check');
+                } else {
+                    vintoPersoContinua(newCell);
                 }
             }
         }
     }
+}
+
+//funzione che aggiunge la flag
+function addFlag(cella) {
+    cella.innerHTML = '<i class="fa-solid fa-flag"></i>';
+    cella.classList.add('flagged');
+    cella.removeEventListener('click', clickHandler);
+}
+
+//funzione che rimuove la flag
+function removeFlag(cella) {
+    cella.innerHTML = '';
+    cella.classList.remove('flagged');
+    cella.addEventListener('click', clickHandler);
 }
 
 //funzione che gestisce il mouseDown
@@ -305,13 +345,22 @@ function mouseUpHandler(event) {
             const square = this;
             if(!square.classList.contains('clicked')) {
                 if(square.classList.contains('flagged')) {
-                    square.innerHTML = '';
-                    square.classList.remove('flagged');
-                    square.addEventListener('click', clickHandler);
+                    if(arrayBombe.includes(square.id)) {
+                        removeFlag(square);
+                        bombFlagged--;
+                    } else {
+                        removeFlag(square);
+                    }
                 } else {
-                    square.innerHTML = '<i class="fa-solid fa-flag"></i>';
-                    square.classList.add('flagged');
-                    square.removeEventListener('click', clickHandler);
+                    if(arrayBombe.includes(square.id)) {
+                        addFlag(square);
+                        bombFlagged++;
+                    } else {
+                        addFlag(square);
+                    }
+                }
+                if(bombFlagged === arrayBombe.length) {
+                    vintoPersoContinua(square);
                 }
             }
         } else {
@@ -324,7 +373,6 @@ function mouseUpHandler(event) {
 // funzione che gestisce il click
 function clickHandler() {
     const square = this;
-    square.classList.toggle('clicked'); 
     vintoPersoContinua(square); 
     square.style.cursor = 'auto';
 }
@@ -448,6 +496,57 @@ function countBombsNerby(x, y) {
     return countBombs;
 }
 
+// funzione che calcola il numero delle bombe flaggate confinanti la cella
+// e lo restituisce
+function countFlaggedBombsNerby(x, y) {
+    let countFlaggedBombs = 0;
+    let xy = null;
+    let cella = null;
+    const xMatrix = x - 1;
+    const yMatrix = y - 1;
+    if(xMatrix - 1 >= 0) {
+        xy = `${x - 1} ${y}`;
+        cella = document.getElementById(xy);
+        cella.classList.contains('flagged') && matrixCampo[yMatrix][xMatrix - 1] === 'B' ? countFlaggedBombs++ : '';
+        if(yMatrix + 1 <= 9) {
+            xy = `${x - 1} ${y + 1}`;
+            cella = document.getElementById(xy);
+            cella.classList.contains('flagged') && matrixCampo[yMatrix + 1][xMatrix - 1] === 'B' ? countFlaggedBombs++ : '';
+        }
+        if(yMatrix - 1 >= 0) {
+            xy = `${x - 1} ${y - 1}`;
+            cella = document.getElementById(xy);
+            cella.classList.contains('flagged') && matrixCampo[yMatrix - 1][xMatrix - 1] === 'B' ? countFlaggedBombs++ : '';
+        }
+    }
+    if(yMatrix - 1 >= 0) {
+        xy = `${x} ${y - 1}`;
+        cella = document.getElementById(xy);
+        cella.classList.contains('flagged') && matrixCampo[yMatrix - 1][xMatrix] === 'B' ? countFlaggedBombs++ : '';
+        if(xMatrix + 1 <= 9) {
+            xy = `${x + 1} ${y - 1}`;
+            cella = document.getElementById(xy);
+            cella.classList.contains('flagged') && matrixCampo[yMatrix - 1][xMatrix + 1] === 'B' ? countFlaggedBombs++ : '';
+        }
+    }
+    if(xMatrix + 1 <= 9) {
+        xy = `${x + 1} ${y}`;
+        cella = document.getElementById(xy);
+        cella.classList.contains('flagged') && matrixCampo[yMatrix][xMatrix + 1] === 'B' ? countFlaggedBombs++ : '';
+        if(yMatrix + 1 <= 9) {
+            xy = `${x + 1} ${y + 1}`;
+            cella = document.getElementById(xy);
+            cella.classList.contains('flagged') && matrixCampo[yMatrix + 1][xMatrix + 1] === 'B' ? countFlaggedBombs++ : '';
+        }   
+    }
+    if(yMatrix + 1 <= 9) {
+        xy = `${x} ${y + 1}`;
+        cella = document.getElementById(xy);
+        cella.classList.contains('flagged') && matrixCampo[yMatrix + 1][xMatrix] === 'B' ? countFlaggedBombs++ : '';
+    }
+    return countFlaggedBombs;
+}
+
 // funzione che inizia la partita
 function iniziaGioco() {
     // preparo le variabili e resetto la tabella
@@ -465,6 +564,7 @@ let numCelleRiga;
 let arrayBombe = [];
 let matrixCampo = null;
 let punteggio = 0;
+let bombFlagged = 0;
 let leftMouseDown = false;
 let rightMouseDown = false;
 
